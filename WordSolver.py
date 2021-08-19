@@ -27,13 +27,15 @@ def main():
         if cap_input_box[750 - input_coords[0], 1380 - input_coords[1]] == 20:
             # run function
             text = pytesseract.image_to_string(cap_bomb)
-            #print(text)
-
-            thresh = 255 - cv2.threshold(cap_bomb, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+            print(text)
+            imagem = cv2.bitwise_not(cap_bomb)
+            #thresh = cv2.threshold(cap_bomb, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
             # thresh = cv2.GaussianBlur(thresh, (3, 3), 0)
-            data = pytesseract.image_to_string(thresh, lang='eng', config='--psm 7 -c tessedit_char_whitelist'
-                                                                          '=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz')
+            data = pytesseract.image_to_string(imagem, lang='eng', config='-c tessedit_char_whitelist'
+                                                                          '=ABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 7 ')
+            if "1" in data:
+                data.replace("1", "i")
             letters = data.rstrip().lower()
             print(letters)
             if letters.isalpha():
@@ -54,7 +56,7 @@ def main():
             # print(text)
 
             # Shows the capture of the bomb
-            # cv2.imshow("thresh", thresh)
+            cv2.imshow("imagem", imagem)
             # Wait
             time.sleep(1)
 
